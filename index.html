@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YUNGTOZO | Sound Engineer & Music Producer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Oswald (Display), JetBrains Mono (Tech/Console), Cairo (Arabic), Inter (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        studio: {
+                            bg: '#060807',
+                            card: '#0b0f0c',
+                            surface: '#101612',
+                            border: '#1b261e',
+                            green: '#1ed760',
+                            emerald: '#10b981',
+                            greenDark: '#0c2916',
+                            muted: '#8b998e',
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Oswald', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        arabic: ['Cairo', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060807;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1b261e;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1ed760;
+        }
+
+        /* Subtle Studio Grid Background */
+        .studio-grid-bg {
+            background-image: 
+                linear-gradient(to right, rgba(30, 215, 96, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 215, 96, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        /* Active Glows */
+        .green-glow {
+            box-shadow: 0 0 20px rgba(30, 215, 96, 0.15);
+        }
+        .green-glow-strong {
+            box-shadow: 0 0 25px rgba(30, 215, 96, 0.35);
+        }
+
+        /* Console Pad Press Effect */
+        .console-pad:active {
+            transform: scale(0.97);
+        }
+    </style>
+</head>
+<body class="bg-studio-bg text-white font-sans antialiased studio-grid-bg min-h-screen selection:bg-studio-green selection:text-black">
+
+    <!-- Toast Notification Banner (Replaces alert()) -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-studio-surface border border-studio-green text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 font-mono text-xs">
+            <span class="w-2 h-2 rounded-full bg-studio-green animate-ping"></span>
+            <span id="toast-message">Action completed</span>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="max-w-3xl mx-auto px-3 sm:px-6 py-5 sm:py-8 space-y-6">
+
+        <!-- TOP STATUS & BRAND HEADER -->
+        <header class="flex items-center justify-between gap-2 px-1">
+            <!-- Status Pill -->
+            <div class="inline-flex items-center gap-2 bg-studio-greenDark/80 border border-studio-emerald/40 px-3 py-1.5 rounded-md font-mono text-[11px] sm:text-xs text-studio-green tracking-wider">
+                <span class="w-1.5 h-1.5 rounded-full bg-studio-green animate-pulse"></span>
+                <span>JEDDAH • STUDIO-01</span>
+            </div>
+
+            <!-- Brand Name + Monogram Circle -->
+            <div class="flex items-center gap-3">
+                <span class="font-display font-bold text-lg sm:text-xl tracking-wider uppercase text-white">YUNGTOZO</span>
+                <a href="#home" class="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center font-display font-bold text-sm tracking-tighter border-2 border-studio-green green-glow transition-transform hover:scale-105">
+                    YT
+                </a>
+            </div>
+        </header>
+
+        <!-- INTERACTIVE PILL INDEX BAR (Matches Screenshot Top Grid) -->
+        <nav aria-label="Quick Index Navigation" class="flex flex-wrap items-center justify-end gap-1.5 sm:gap-2" dir="rtl">
+            <a href="#story" class="index-pill active-pill font-arabic text-xs sm:text-[13px] font-semibold px-3 py-1.5 rounded-lg bg-studio-greenDark/90 border border-studio-green text-white green-glow transition-all">
+                1. السيرة الذاتية | Bio
+            </a>
+            <a href="#works" class="index-pill font-arabic text-xs sm:text-[13px] font-medium px-3 py-1.5 rounded-lg bg-studio-card border border-studio-border text-gray-300 hover:border-studio-green/60 hover:text-white transition-all">
+                2. فهرس الأعمال | Index
+            </a>
+            <button onclick="filterAndScroll('track-1')" class="index-pill font-arabic text-xs sm:text-[13px] font-medium px-3 py-1.5 rounded-lg bg-studio-card border border-studio-border text-gray-300 hover:border-studio-green/60 hover:text-white transition-all">
+                3. ليالي جدة
+            </button>
+            <button onclick="filterAndScroll('track-2')" class="index-pill font-arabic text-xs sm:text-[13px] font-medium px-3 py-1.5 rounded-lg bg-studio-card border border-studio-border text-gray-300 hover:border-studio-green/60 hover:text-white transition-all">
+                4. صدى الظلام
+            </button>
+            <button onclick="filterAndScroll('track-3')" class="index-pill font-arabic text-xs sm:text-[13px] font-medium px-3 py-1.5 rounded-lg bg-studio-card border border-studio-border text-gray-300 hover:border-studio-green/60 hover:text-white transition-all">
+                5. تراب 808
+            </button>
+            <button onclick="filterAndScroll('track-4')" class="index-pill font-arabic text-xs sm:text-[13px] font-medium px-3 py-1.5 rounded-lg bg-studio-card border border-studio-border text-gray-300 hover:border-studio-green/60 hover:text-white transition-all">
+                6. مكساج سينمائي
+            </button>
+            <button onclick="filterAndScroll('track-5')" class="index-pill font-arabic text-xs sm:text-[13px] font-medium px-3 py-1.5 rounded-lg bg-studio-card border border-studio-border text-gray-300 hover:border-studio-green/60 hover:text-white transition-all">
+                7. ماسترينغ ألبوم
+            </button>
+            <button onclick="filterAndScroll('track-6')" class="index-pill font-arabic text-xs sm:text-[13px] font-medium px-3 py-1.5 rounded-lg bg-studio-card border border-studio-border text-gray-300 hover:border-studio-green/60 hover:text-white transition-all">
+                8. إيقاع حر
+            </button>
+            <button onclick="filterAndScroll('console')" class="index-pill font-arabic text-xs sm:text-[13px] font-medium px-3 py-1.5 rounded-lg bg-studio-card border border-studio-border text-gray-300 hover:border-studio-green/60 hover:text-white transition-all">
+                9. وحدة الصوت | Console
+            </button>
+            <a href="#contact" class="index-pill font-arabic text-xs sm:text-[13px] font-medium px-3 py-1.5 rounded-lg bg-studio-card border border-studio-border text-gray-300 hover:border-studio-green/60 hover:text-white transition-all">
+                10. التواصل | Contact
+            </a>
+        </nav>
+
+        <!-- HERO CARD SECTION -->
+        <section id="home" class="relative bg-studio-card border border-studio-border rounded-2xl p-5 sm:p-8 overflow-hidden shadow-2xl">
+            <!-- Subtle Background Ambient Glow -->
+            <div class="absolute -top-24 -right-24 w-72 h-72 bg-studio-green/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/80 to-transparent pointer-events-none"></div>
+
+            <!-- Top Row inside Hero: Mini Nav & Explore Button -->
+            <div class="relative z-10 flex items-start justify-between">
+                <div class="flex items-start gap-4">
+                    <div class="w-11 h-11 rounded-full bg-white text-black flex items-center justify-center font-display font-bold text-base shrink-0">
+                        YT
+                    </div>
+                    <!-- Vertical Mini Nav with Active Green Line -->
+                    <ul class="space-y-1.5 font-mono text-xs tracking-widest">
+                        <li class="pl-3 border-l-2 border-studio-green text-white font-bold">
+                            <a href="#home">HOME</a>
+                        </li>
+                        <li class="pl-3 border-l-2 border-transparent text-studio-muted hover:text-white transition-colors">
+                            <a href="#works">WORKS</a>
+                        </li>
+                        <li class="pl-3 border-l-2 border-transparent text-studio-muted hover:text-white transition-colors">
+                            <a href="#console">CONSOLE</a>
+                        </li>
+                        <li class="pl-3 border-l-2 border-transparent text-studio-muted hover:text-white transition-colors">
+                            <a href="#contact">CONTACT</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <a href="#works" class="font-mono text-xs tracking-wider uppercase px-4 py-2.5 rounded-lg bg-studio-greenDark/70 border border-studio-emerald/60 text-white hover:bg-studio-green hover:text-black font-semibold transition-all">
+                    EXPLORE WORKS
+                </a>
+            </div>
+
+            <!-- Main Hero Typography -->
+            <div class="relative z-10 mt-10 sm:mt-14">
+                <p class="font-mono text-xs sm:text-sm tracking-[0.22em] text-gray-200 uppercase mb-2">
+                    SOUND ENGINEER &amp; PRODUCER
+                </p>
+                <h1 class="font-display font-bold text-6xl sm:text-8xl leading-[0.9] tracking-tight uppercase text-white">
+                    YUNG<br>TOZO
+                </h1>
+                <p class="font-mono text-xs sm:text-sm tracking-[0.28em] text-studio-green uppercase mt-4">
+                    TOZO SOUNDS &nbsp;•&nbsp; HIP-HOP &amp; TRAP<br>
+                    <span class="text-studio-emerald/80">J E D D A H &nbsp; S T U D I O</span>
+                </p>
+            </div>
+
+            <!-- Right-Aligned Action Stack (Matching Screenshot Layout) -->
+            <div class="relative z-10 mt-8 flex flex-col items-end space-y-2.5" dir="rtl">
+                <a href="#works" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-3 rounded-xl bg-studio-greenDark/90 border border-studio-green text-white font-arabic font-bold text-sm sm:text-base hover:bg-studio-green hover:text-black transition-all green-glow">
+                    <span>تصفح فهرس الأعمال (8 أعمال)</span>
+                    <span class="font-mono">←</span>
+                </a>
+                <button onclick="playFeaturedTrack()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-studio-surface border border-studio-border text-gray-200 font-arabic font-semibold text-sm hover:border-studio-green/60 hover:text-white transition-all">
+                    <span>البدء بأول عمل: ليالي جدة (808 Mix)</span>
+                </button>
+                <a href="#contact" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2.5 rounded-xl bg-studio-surface/70 border border-studio-border text-gray-300 font-arabic font-medium text-sm hover:border-studio-green/60 hover:text-white transition-all">
+                    <span>معلومات التواصل</span>
+                </a>
+            </div>
+
+            <!-- Featured Studio Media Preview Card -->
+            <div class="relative z-10 mt-8 flex items-center gap-4">
+                <button onclick="playFeaturedTrack()" aria-label="Play Studio Session Preview" class="w-14 h-14 rounded-xl bg-white text-black flex items-center justify-center shadow-lg hover:bg-studio-green hover:scale-105 transition-all shrink-0">
+                    <svg id="hero-play-icon" class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </button>
+
+                <div onclick="playFeaturedTrack()" class="cursor-pointer group relative flex-1 max-w-xs h-28 rounded-xl overflow-hidden border border-studio-emerald/50 bg-studio-surface">
+                    <!-- SVG Studio Mixer / Waveform Graphic -->
+                    <svg class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-500" viewBox="0 0 400 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="400" height="160" fill="#0d140f"/>
+                        <circle cx="310" cy="45" r="70" fill="#1ed760" fill-opacity="0.12"/>
+                        <!-- Console Faders -->
+                        <g stroke="#1b261e" stroke-width="2">
+                            <line x1="50" y1="25" x2="50" y2="135"/><line x1="90" y1="25" x2="90" y2="135"/>
+                            <line x1="130" y1="25" x2="130" y2="135"/><line x1="170" y1="25" x2="170" y2="135"/>
+                            <line x1="210" y1="25" x2="210" y2="135"/><line x1="250" y1="25" x2="250" y2="135"/>
+                            <line x1="290" y1="25" x2="290" y2="135"/><line x1="330" y1="25" x2="330" y2="135"/>
+                        </g>
+                        <!-- Fader Knobs -->
+                        <rect x="42" y="55" width="16" height="24" rx="3" fill="#1ed760"/>
+                        <rect x="82" y="80" width="16" height="24" rx="3" fill="#e5e7eb"/>
+                        <rect x="122" y="40" width="16" height="24" rx="3" fill="#e5e7eb"/>
+                        <rect x="162" y="70" width="16" height="24" rx="3" fill="#1ed760"/>
+                        <rect x="202" y="50" width="16" height="24" rx="3" fill="#e5e7eb"/>
+                        <rect x="242" y="90" width="16" height="24" rx="3" fill="#1ed760"/>
+                        <rect x="282" y="45" width="16" height="24" rx="3" fill="#e5e7eb"/>
+                        <rect x="322" y="65" width="16" height="24" rx="3" fill="#1ed760"/>
+                    </svg>
+                    <span class="absolute bottom-2 left-2 bg-black/85 border border-studio-emerald/50 text-studio-green font-mono text-[10px] px-2 py-0.5 rounded">
+                        IN-STUDIO SESSION
+                    </span>
+                </div>
+            </div>
+
+            <!-- Hero Footer Metadata Strip -->
+            <div class="relative z-10 mt-8 pt-5 border-t border-studio-border/80 space-y-2.5">
+                <div class="flex items-center gap-2 font-mono text-xs text-studio-green tracking-wider">
+                    <span>🎚️</span>
+                    <span>IN-STUDIO &amp; POST AUDIO</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2 font-mono text-xs text-gray-300">
+                    <span class="font-arabic text-gray-200">راكان سالم شوعي</span>
+                    <span class="text-studio-green">•</span>
+                    <span>ARTIST: YUNGTOZO</span>
+                    <span class="text-studio-green">•</span>
+                    <span>LOC: JEDDAH</span>
+                </div>
+                <div class="flex items-center gap-4 pt-1 font-mono text-xs text-white tracking-widest">
+                    <a href="#contact" class="hover:text-studio-green transition-colors">IG</a>
+                    <a href="#works" class="hover:text-studio-green transition-colors">SPOTIFY</a>
+                    <a href="#works" class="hover:text-studio-green transition-colors">YT</a>
+                    <button onclick="copyText('yungtozo.audio@gmail.com', 'تم نسخ البريد الإلكتروني!')" class="hover:text-studio-green transition-colors uppercase">MAIL</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 01 // PROFILE (STORY + STUDIO CONSOLE) -->
+        <section id="story" class="relative bg-studio-card border border-studio-border rounded-2xl p-5 sm:p-8 shadow-2xl overflow-hidden">
+            <!-- Left Vertical Green Accent Bar -->
+            <div class="absolute top-0 left-0 bottom-0 w-1 bg-gradient-to-b from-studio-green via-studio-emerald to-transparent"></div>
+
+            <p class="font-mono text-xs tracking-widest text-studio-green uppercase mb-1">
+                01 // PROFILE
+            </p>
+            <h2 class="font-display font-bold text-4xl sm:text-5xl tracking-tight uppercase text-white mb-6">
+                STORY
+            </h2>
+
+            <!-- Bilingual Bio Block with Green Side Border -->
+            <div class="border-l-2 border-studio-green pl-4 sm:pl-5 space-y-4">
+                <p class="text-gray-200 text-sm sm:text-base leading-relaxed">
+                    <strong class="text-white">Rakan Salem Al-Shouai (YungTozo)</strong> — Hip-Hop &amp; Trap Artist, Sound Engineer &amp; Audio Producer based in <strong class="text-white">Jeddah</strong> (<span class="font-mono text-studio-green">Tozo Sounds • Studio-01</span>). Crafting hard-hitting 808 beats, crisp vocal mixes, and industry-ready mastering.
+                </p>
+                <p class="font-arabic text-gray-300 text-sm sm:text-base leading-relaxed" dir="rtl">
+                    <strong class="text-white">راكان سالم شوعي (يُنق توزو)</strong> — فنان هيب هوب وتراب، مهندس صوت ومنتج موسيقي. متخصص في تسجيل وهندسة الأصوات، المكساج والماسترينغ الاحترافي، وصناعة الإيقاعات (Beats) والمؤثرات الصوتية السينمائية.
+                </p>
+            </div>
+
+            <!-- Skill Pills -->
+            <div class="flex flex-wrap gap-2 mt-6">
+                <span class="font-mono text-xs px-3.5 py-2 rounded-lg bg-studio-greenDark/70 border border-studio-emerald/50 text-studio-green tracking-wider">
+                    VOCAL MIXING
+                </span>
+                <span class="font-mono text-xs px-3.5 py-2 rounded-lg bg-studio-greenDark/70 border border-studio-emerald/50 text-studio-green tracking-wider">
+                    BEAT PRODUCTION
+                </span>
+                <span class="font-mono text-xs px-3.5 py-2 rounded-lg bg-studio-greenDark/70 border border-studio-emerald/50 text-studio-green tracking-wider">
+                    MASTERING &amp; SFX
+                </span>
+            </div>
+
+            <!-- INTERACTIVE STUDIO CONSOLE MODULE -->
+            <div id="console" class="mt-8 bg-studio-bg border border-studio-border rounded-xl p-4 sm:p-5">
+                <!-- Console Header -->
+                <div class="flex items-center justify-between mb-4">
+                    <span id="console-status-badge" class="font-mono text-xs font-semibold px-3 py-1 rounded bg-studio-greenDark border border-studio-emerald/50 text-studio-green tracking-wider transition-colors">
+                        READY
+                    </span>
+                    <span class="font-mono text-xs font-semibold text-studio-green tracking-widest">
+                        STUDIO CONSOLE
+                    </span>
+                </div>
+
+                <!-- Live Waveform Visualizer Display -->
+                <div class="relative h-28 sm:h-32 w-full rounded-lg bg-[#050706] border border-studio-border overflow-hidden mb-4 flex items-center justify-center">
+                    <canvas id="visualizer-canvas" class="w-full h-full block"></canvas>
+                    <div id="console-readout" class="absolute top-2 left-3 font-mono text-[10px] text-studio-muted pointer-events-none">
+                        CH-01 // IDLE • 48kHz 24-BIT
+                    </div>
+                </div>
+
+                <!-- 4 Interactive Sound Trigger Pads (Web Audio API Synthesized) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <button onclick="triggerConsoleSound('sync')" class="console-pad flex items-center justify-between px-4 py-3.5 rounded-lg bg-studio-surface border border-studio-border hover:border-studio-green text-left transition-all group">
+                        <span class="font-sans text-xs sm:text-sm font-medium text-gray-200 group-hover:text-white">Vocal Sync Beep</span>
+                        <span class="text-base">🎙️</span>
+                    </button>
+
+                    <button onclick="triggerConsoleSound('bass')" class="console-pad flex items-center justify-between px-4 py-3.5 rounded-lg bg-studio-surface border border-studio-border hover:border-studio-green text-left transition-all group">
+                        <span class="font-sans text-xs sm:text-sm font-medium text-gray-200 group-hover:text-white">Trap 808 Sub-Bass</span>
+                        <span class="text-base">🔊</span>
+                    </button>
+
+                    <button onclick="triggerConsoleSound('chime')" class="console-pad flex items-center justify-between px-4 py-3.5 rounded-lg bg-studio-surface border border-studio-border hover:border-studio-green text-left transition-all group">
+                        <span class="font-sans text-xs sm:text-sm font-medium text-gray-200 group-hover:text-white">Ambient Pad Chime</span>
+                        <span class="text-base">🎧</span>
+                    </button>
+
+                    <button onclick="triggerConsoleSound('sweep')" class="console-pad flex items-center justify-between px-4 py-3.5 rounded-lg bg-studio-surface border border-studio-border hover:border-studio-green text-left transition-all group">
+                        <span class="font-sans text-xs sm:text-sm font-medium text-gray-200 group-hover:text-white">Riser / SFX Sweep</span>
+                        <span class="text-base">⚡</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 02 // WORKS & CATALOG -->
+        <section id="works" class="relative bg-studio-card border border-studio-border rounded-2xl p-5 sm:p-8 shadow-2xl">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+                <div>
+                    <p class="font-mono text-xs tracking-widest text-studio-green uppercase mb-1">
+                        02 // CATALOG &amp; RELEASES
+                    </p>
+                    <h2 class="font-display font-bold text-3xl sm:text-4xl tracking-tight uppercase text-white">
+                        SELECTED WORKS
+                    </h2>
+                </div>
+
+                <!-- Category Filter Buttons -->
+                <div class="flex flex-wrap gap-1.5 font-mono text-xs">
+                    <button onclick="filterWorks('all')" data-filter="all" class="filter-btn px-3 py-1.5 rounded-lg bg-studio-green text-black font-bold transition-all">
+                        ALL (08)
+                    </button>
+                    <button onclick="filterWorks('production')" data-filter="production" class="filter-btn px-3 py-1.5 rounded-lg bg-studio-surface border border-studio-border text-gray-300 hover:border-studio-green transition-all">
+                        BEATS &amp; TRACKS
+                    </button>
+                    <button onclick="filterWorks('engineering')" data-filter="engineering" class="filter-btn px-3 py-1.5 rounded-lg bg-studio-surface border border-studio-border text-gray-300 hover:border-studio-green transition-all">
+                        MIX &amp; MASTER
+                    </button>
+                </div>
+            </div>
+
+            <!-- Works List -->
+            <div id="works-grid" class="space-y-3">
+                <!-- Track 1 -->
+                <div id="track-1" data-category="production" class="work-item group bg-studio-surface border border-studio-border hover:border-studio-green/70 rounded-xl p-4 flex items-center justify-between gap-4 transition-all">
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <button onclick="playTrackDemo('ليالي جدة (808 Mix)', 140, 'F Minor', 'bass')" class="w-10 h-10 rounded-lg bg-studio-greenDark border border-studio-emerald/50 text-studio-green group-hover:bg-studio-green group-hover:text-black flex items-center justify-center shrink-0 transition-all">
+                            ▶
+                        </button>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono text-xs text-studio-green">01</span>
+                                <h3 class="font-arabic font-bold text-base text-white truncate">ليالي جدة — YungTozo</h3>
+                            </div>
+                            <p class="font-mono text-[11px] text-studio-muted truncate">
+                                PROD. &amp; VOCALS • 140 BPM • F MIN
+                            </p>
+                        </div>
+                    </div>
+                    <span class="font-mono text-xs px-2.5 py-1 rounded bg-black/50 border border-studio-border text-gray-300 shrink-0">
+                        02:48
+                    </span>
+                </div>
+
+                <!-- Track 2 -->
+                <div id="track-2" data-category="production" class="work-item group bg-studio-surface border border-studio-border hover:border-studio-green/70 rounded-xl p-4 flex items-center justify-between gap-4 transition-all">
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <button onclick="playTrackDemo('صدى الظلام — Dark Trap', 132, 'C# Minor', 'chime')" class="w-10 h-10 rounded-lg bg-studio-greenDark border border-studio-emerald/50 text-studio-green group-hover:bg-studio-green group-hover:text-black flex items-center justify-center shrink-0 transition-all">
+                            ▶
+                        </button>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono text-xs text-studio-green">02</span>
+                                <h3 class="font-arabic font-bold text-base text-white truncate">صدى الظلام — Dark Trap</h3>
+                            </div>
+                            <p class="font-mono text-[11px] text-studio-muted truncate">
+                                BEAT PRODUCTION • 132 BPM • C# MIN
+                            </p>
+                        </div>
+                    </div>
+                    <span class="font-mono text-xs px-2.5 py-1 rounded bg-black/50 border border-studio-border text-gray-300 shrink-0">
+                        03:12
+                    </span>
+                </div>
+
+                <!-- Track 3 -->
+                <div id="track-3" data-category="production" class="work-item group bg-studio-surface border border-studio-border hover:border-studio-green/70 rounded-xl p-4 flex items-center justify-between gap-4 transition-all">
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <button onclick="playTrackDemo('تراب 808 — Heavy Drill', 144, 'G Minor', 'bass')" class="w-10 h-10 rounded-lg bg-studio-greenDark border border-studio-emerald/50 text-studio-green group-hover:bg-studio-green group-hover:text-black flex items-center justify-center shrink-0 transition-all">
+                            ▶
+                        </button>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono text-xs text-studio-green">03</span>
+                                <h3 class="font-arabic font-bold text-base text-white truncate">تراب 808 — Heavy Drill</h3>
+                            </div>
+                            <p class="font-mono text-[11px] text-studio-muted truncate">
+                                FULL PRODUCTION • 144 BPM • G MIN
+                            </p>
+                        </div>
+                    </div>
+                    <span class="font-mono text-xs px-2.5 py-1 rounded bg-black/50 border border-studio-border text-gray-300 shrink-0">
+                        02:35
+                    </span>
+                </div>
+
+                <!-- Track 4 -->
+                <div id="track-4" data-category="engineering" class="work-item group bg-studio-surface border border-studio-border hover:border-studio-green/70 rounded-xl p-4 flex items-center justify-between gap-4 transition-all">
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <button onclick="playTrackDemo('مكساج وهندسة صوتية — EP', 120, 'A Minor', 'sweep')" class="w-10 h-10 rounded-lg bg-studio-greenDark border border-studio-emerald/50 text-studio-green group-hover:bg-studio-green group-hover:text-black flex items-center justify-center shrink-0 transition-all">
+                            ▶
+                        </button>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono text-xs text-studio-green">04</span>
+                                <h3 class="font-arabic font-bold text-base text-white truncate">مكساج وهندسة صوتية — EP</h3>
+                            </div>
+                            <p class="font-mono text-[11px] text-studio-muted truncate">
+                                VOCAL CHAIN &amp; MIXING • -8.5 LUFS
+                            </p>
+                        </div>
+                    </div>
+                    <span class="font-mono text-xs px-2.5 py-1 rounded bg-black/50 border border-studio-border text-gray-300 shrink-0">
+                        04:05
+                    </span>
+                </div>
+
+                <!-- Track 5 -->
+                <div id="track-5" data-category="engineering" class="work-item group bg-studio-surface border border-studio-border hover:border-studio-green/70 rounded-xl p-4 flex items-center justify-between gap-4 transition-all">
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <button onclick="playTrackDemo('ماسترينغ ألبوم هيب هوب', 98, 'D Minor', 'sync')" class="w-10 h-10 rounded-lg bg-studio-greenDark border border-studio-emerald/50 text-studio-green group-hover:bg-studio-green group-hover:text-black flex items-center justify-center shrink-0 transition-all">
+                            ▶
+                        </button>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono text-xs text-studio-green">05</span>
+                                <h3 class="font-arabic font-bold text-base text-white truncate">ماسترينغ ألبوم هيب هوب</h3>
+                            </div>
+                            <p class="font-mono text-[11px] text-studio-muted truncate">
+                                ANALOG &amp; DIGITAL MASTERING • 24-BIT
+                            </p>
+                        </div>
+                    </div>
+                    <span class="font-mono text-xs px-2.5 py-1 rounded bg-black/50 border border-studio-border text-gray-300 shrink-0">
+                        03:50
+                    </span>
+                </div>
+
+                <!-- Track 6 -->
+                <div id="track-6" data-category="production" class="work-item group bg-studio-surface border border-studio-border hover:border-studio-green/70 rounded-xl p-4 flex items-center justify-between gap-4 transition-all">
+                    <div class="flex items-center gap-3.5 min-w-0">
+                        <button onclick="playTrackDemo('إيقاع حر — Melodic Trap', 128, 'E Minor', 'chime')" class="w-10 h-10 rounded-lg bg-studio-greenDark border border-studio-emerald/50 text-studio-green group-hover:bg-studio-green group-hover:text-black flex items-center justify-center shrink-0 transition-all">
+                            ▶
+                        </button>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono text-xs text-studio-green">06</span>
+                                <h3 class="font-arabic font-bold text-base text-white truncate">إيقاع حر — Melodic Trap</h3>
+                            </div>
+                            <p class="font-mono text-[11px] text-studio-muted truncate">
+                                INSTRUMENTAL &amp; ARRANGEMENT • 128 BPM
+                            </p>
+                        </div>
+                    </div>
+                    <span class="font-mono text-xs px-2.5 py-1 rounded bg-black/50 border border-studio-border text-gray-300 shrink-0">
+                        02:58
+                    </span>
+                </div>
+            </div>
+
+            <!-- Active Now-Playing Strip -->
+            <div id="now-playing-bar" class="hidden mt-5 p-3.5 rounded-xl bg-studio-greenDark/60 border border-studio-green flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 min-w-0">
+                    <span class="w-2.5 h-2.5 rounded-full bg-studio-green animate-ping shrink-0"></span>
+                    <div class="min-w-0">
+                        <p class="font-mono text-[10px] text-studio-green uppercase">PREVIEWING AUDIO SIGNAL</p>
+                        <p id="now-playing-title" class="font-arabic font-bold text-sm text-white truncate">Track Name</p>
+                    </div>
+                </div>
+                <span id="now-playing-meta" class="font-mono text-xs text-gray-200 shrink-0">140 BPM</span>
+            </div>
+        </section>
+
+        <!-- SECTION 03 // CONTACT & BOOKING -->
+        <section id="contact" class="relative bg-studio-card border border-studio-border rounded-2xl p-5 sm:p-8 shadow-2xl">
+            <p class="font-mono text-xs tracking-widest text-studio-green uppercase mb-1">
+                03 // BOOKING &amp; COLLABS
+            </p>
+            <h2 class="font-display font-bold text-3xl sm:text-4xl tracking-tight uppercase text-white mb-2">
+                GET IN TOUCH
+            </h2>
+            <p class="font-arabic text-sm text-studio-muted mb-6" dir="rtl">
+                للحجوزات، طلبات المكساج والماسترينغ، أو التعاون الموسيقي مع <span class="text-white font-semibold">YungTozo</span>:
+            </p>
+
+            <!-- Direct Social & Copy Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                <button onclick="copyText('@yungtozo', 'تم نسخ حساب الإنستقرام @yungtozo')" class="p-4 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-green text-left transition-all group">
+                    <span class="font-mono text-[10px] text-studio-green block mb-1">INSTAGRAM</span>
+                    <span class="font-mono text-sm text-white font-semibold group-hover:text-studio-green transition-colors">@yungtozo</span>
+                </button>
+
+                <button onclick="copyText('yungtozo.audio@gmail.com', 'تم نسخ البريد الإلكتروني!')" class="p-4 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-green text-left transition-all group">
+                    <span class="font-mono text-[10px] text-studio-green block mb-1">DIRECT EMAIL</span>
+                    <span class="font-mono text-xs text-white font-semibold truncate block group-hover:text-studio-green transition-colors">yungtozo.audio@gmail.com</span>
+                </button>
+
+                <button onclick="copyText('Jeddah, Saudi Arabia', 'تم نسخ الموقع: جدة، السعودية')" class="p-4 rounded-xl bg-studio-surface border border-studio-border hover:border-studio-green text-left transition-all group">
+                    <span class="font-mono text-[10px] text-studio-green block mb-1">STUDIO BASE</span>
+                    <span class="font-mono text-sm text-white font-semibold group-hover:text-studio-green transition-colors">JEDDAH, KSA</span>
+                </button>
+            </div>
+
+            <!-- Quick Inquiry Form -->
+            <form onsubmit="handleBookingSubmit(event)" class="space-y-3" dir="rtl">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <input type="text" required placeholder="الاسم أو اسم الفنان" class="w-full px-4 py-3 rounded-xl bg-studio-bg border border-studio-border focus:border-studio-green focus:outline-none text-sm text-white font-arabic placeholder-gray-500">
+                    <select class="w-full px-4 py-3 rounded-xl bg-studio-bg border border-studio-border focus:border-studio-green focus:outline-none text-sm text-gray-200 font-arabic">
+                        <option value="mix">مكساج وماسترينغ (Mix &amp; Master)</option>
+                        <option value="beat">صناعة بيت حصري (Custom Beat)</option>
+                        <option value="collab">تعاون فني (Feature / Collab)</option>
+                        <option value="session">حجز جلسة استوديو</option>
+                    </select>
+                </div>
+                <textarea rows="3" required placeholder="اكتب تفاصيل مشروعك أو رابط الديمو..." class="w-full px-4 py-3 rounded-xl bg-studio-bg border border-studio-border focus:border-studio-green focus:outline-none text-sm text-white font-arabic placeholder-gray-500"></textarea>
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-studio-green text-black font-arabic font-bold text-sm sm:text-base hover:bg-studio-emerald transition-all green-glow">
+                    إرسال الطلب إلى الاستوديو ←
+                </button>
+            </form>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center py-6 border-t border-studio-border/60 font-mono text-xs text-studio-muted space-y-1">
+            <p>© 2026 YUNGTOZO (RAKAN SALEM AL-SHOUAI). ALL RIGHTS RESERVED.</p>
+            <p class="text-[11px] text-studio-green/80">TOZO SOUNDS • ENGINEERED IN JEDDAH</p>
+        </footer>
+
+    </div>
+
+    <!-- JAVASCRIPT: WEB AUDIO SYNTHESIZER, VISUALIZER & INTERACTIONS -->
+    <script>
+        // --- 1. Toast Notification Helper ---
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            toastMsg.textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // --- 2. Clipboard Copy Helper (Safe for iFrames) ---
+        function copyText(text, message) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                showToast(message);
+            } catch (err) {
+                showToast('Copied: ' + text);
+            }
+            document.body.removeChild(tempInput);
+        }
+
+        // --- 3. Web Audio API Synthesizer for Studio Console ---
+        let audioCtx = null;
+        let activeWaveAmplitude = 0;
+        let activeWaveFreq = 0.04;
+        let activeWaveColor = '#1ed760';
+
+        function initAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContextClass();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function triggerConsoleSound(type) {
+            try {
+                initAudioContext();
+                const now = audioCtx.currentTime;
+                const badge = document.getElementById('console-status-badge');
+                const readout = document.getElementById('console-readout');
+
+                badge.textContent = 'ACTIVE';
+                badge.classList.add('bg-studio-green', 'text-black');
+                badge.classList.remove('bg-studio-greenDark', 'text-studio-green');
+
+                if (type === 'sync') {
+                    // Crisp 1kHz Studio Sync Beep
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(1000, now);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+
+                    readout.textContent = 'CH-01 // 1000Hz SYNC TONE • -6dBFS';
+                    activeWaveAmplitude = 35;
+                    activeWaveFreq = 0.12;
+                } 
+                else if (type === 'bass') {
+                    // Punchy Trap 808 Sub-Bass Drop
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(130, now);
+                    osc.frequency.exponentialRampToValueAtTime(42, now + 0.18);
+                    osc.frequency.exponentialRampToValueAtTime(36, now + 0.9);
+
+                    gain.gain.setValueAtTime(0.65, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.95);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.95);
+
+                    readout.textContent = 'CH-02 // 808 SUB-BASS DROP • 42Hz';
+                    activeWaveAmplitude = 48;
+                    activeWaveFreq = 0.03;
+                } 
+                else if (type === 'chime') {
+                    // Warm Ambient Pad Chord (F Minor 9)
+                    const freqs = [174.61, 207.65, 261.63, 311.13, 392.00];
+                    freqs.forEach((f, idx) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(f, now + idx * 0.04);
+                        gain.gain.setValueAtTime(0.001, now);
+                        gain.gain.linearRampToValueAtTime(0.09, now + 0.25);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start(now + idx * 0.04);
+                        osc.stop(now + 1.45);
+                    });
+
+                    readout.textContent = 'CH-03 // FM9 AMBIENT PAD • STEREO';
+                    activeWaveAmplitude = 30;
+                    activeWaveFreq = 0.06;
+                } 
+                else if (type === 'sweep') {
+                    // Cinematic Riser / SFX Sweep
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(120, now);
+                    osc.frequency.exponentialRampToValueAtTime(1800, now + 0.75);
+
+                    // Lowpass filter for smoothness
+                    const filter = audioCtx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(400, now);
+                    filter.frequency.exponentialRampToValueAtTime(4500, now + 0.75);
+
+                    gain.gain.setValueAtTime(0.05, now);
+                    gain.gain.linearRampToValueAtTime(0.22, now + 0.65);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.85);
+
+                    readout.textContent = 'CH-04 // SFX RISER SWEEP • 120Hz->1.8kHz';
+                    activeWaveAmplitude = 42;
+                    activeWaveFreq = 0.16;
+                }
+
+                setTimeout(() => {
+                    badge.textContent = 'READY';
+                    badge.classList.remove('bg-studio-green', 'text-black');
+                    badge.classList.add('bg-studio-greenDark', 'text-studio-green');
+                }, 900);
+            } catch (e) {
+                console.error('Audio playback error:', e);
+            }
+        }
+
+        // --- 4. Live Canvas Oscilloscope Visualizer ---
+        const canvas = document.getElementById('visualizer-canvas');
+        const ctx = canvas.getContext('2d');
+        let phase = 0;
+
+        function resizeCanvas() {
+            if (!canvas) return;
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+
+        function drawVisualizer() {
+            if (!ctx || !canvas) return;
+            const w = canvas.width;
+            const h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            // Subtle center baseline
+            ctx.strokeStyle = 'rgba(27, 38, 30, 0.7)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, h / 2);
+            ctx.lineTo(w, h / 2);
+            ctx.stroke();
+
+            // Dynamic Studio Waveform
+            ctx.strokeStyle = activeWaveColor;
+            ctx.lineWidth = 2;
+            ctx.shadowBlur = activeWaveAmplitude > 3 ? 12 : 0;
+            ctx.shadowColor = '#1ed760';
+            ctx.beginPath();
+
+            for (let x = 0; x < w; x++) {
+                const distFromCenter = 1 - Math.abs((x - w / 2) / (w / 2));
+                const envelope = Math.pow(distFromCenter, 1.5);
+                const idlePulse = Math.sin(x * 0.03 + phase * 0.5) * 2.5;
+                const activeWave = Math.sin(x * activeWaveFreq + phase) * activeWaveAmplitude * envelope;
+                const y = (h / 2) + idlePulse + activeWave;
+
+                if (x === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            // Smooth decay back to idle
+            activeWaveAmplitude *= 0.94;
+            phase += 0.18;
+            requestAnimationFrame(drawVisualizer);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        window.onload = function() {
+            resizeCanvas();
+            drawVisualizer();
+        };
+
+        // --- 5. Works Filtering & Track Preview ---
+        function filterWorks(category) {
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                if (btn.dataset.filter === category) {
+                    btn.className = 'filter-btn px-3 py-1.5 rounded-lg bg-studio-green text-black font-bold transition-all';
+                } else {
+                    btn.className = 'filter-btn px-3 py-1.5 rounded-lg bg-studio-surface border border-studio-border text-gray-300 hover:border-studio-green transition-all';
+                }
+            });
+
+            const items = document.querySelectorAll('.work-item');
+            items.forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
+        function filterAndScroll(elementId) {
+            filterWorks('all');
+            const target = document.getElementById(elementId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                target.classList.add('border-studio-green', 'green-glow');
+                setTimeout(() => {
+                    target.classList.remove('border-studio-green', 'green-glow');
+                }, 1800);
+            }
+        }
+
+        function playTrackDemo(title, bpm, key, soundType) {
+            triggerConsoleSound(soundType);
+            const bar = document.getElementById('now-playing-bar');
+            const titleEl = document.getElementById('now-playing-title');
+            const metaEl = document.getElementById('now-playing-meta');
+
+            titleEl.textContent = title;
+            metaEl.textContent = `${bpm} BPM • ${key}`;
+            bar.classList.remove('hidden');
+            showToast(`تشغيل معاينة: ${title}`);
+        }
+
+        function playFeaturedTrack() {
+            playTrackDemo('ليالي جدة (808 Mix) — YungTozo', 140, 'F Minor', 'bass');
+        }
+
+        // --- 6. Booking Form Handler ---
+        function handleBookingSubmit(event) {
+            event.preventDefault();
+            triggerConsoleSound('chime');
+            showToast('تم إرسال طلبك بنجاح! سيتواصل معك استوديو YungTozo قريباً.');
+            event.target.reset();
+        }
+    </script>
+</body>
+</html>
